@@ -5,7 +5,7 @@ sidebar_position: 3
 
 # Mithril
 
-Mithril is a stake-based multi-signature protocol for effiency and scalability. It allows the secure aggregation of cryptographic signatures (In this case, Cardano Stake Pool Operators running mithril signers with agreement on an aggregator). For our purposes, this means that a bunch of SPO's running mithril signers all sign and verify regular snapshots. The db snapshots themselves are not hosted on chain (that would be terrible), but rather hosted on a fast clour provider (Google in this case). The security and purpose comes from the cryptographic signatures that verify the snapshots. 
+Mithril is a stake-based multi-signature protocol for effiency and scalability. It allows the secure aggregation of cryptographic signatures (In this case, Cardano stake pool operators running Mithril signers with agreement on an aggregator). For our purposes, this means that a bunch of SPO's running Mithril signers all sign and verify regular snapshots. The db snapshots themselves are not hosted on chain (that would be terrible), but rather hosted on a fast clour provider (Google in this case). The security and purpose comes from the cryptographic signatures that verify the snapshots. 
 
 The more stake involved in signing snapshots, the more secure Mithril is. 
 
@@ -13,27 +13,27 @@ For our purposes, we will be downloading these signed snapshots using a `mithril
 
 Fortunately for us, this is a relatively quick process (especially compared to compiling the robust `cardano-node` in Haskell)
 
-Since Mithril is built with Rust, we need to install the Rust toolchain.
+Since Mithril is built with Rust, we need to install the Rust toolchain, as follows:
 
 ```
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-Hit enter through the default options. 
+Select enter through the default options. 
 
-Once finished, source the cargo env directory. 
+Once finished, source the cargo env directory, as follows: 
 
 ```
 . "$HOME/.cargo/env"
 ```
 
-Next, we need to install a few dependencies. 
+Next, we need to install the following dependencies: 
 
 ```
 sudo apt-get install -y libssl-dev make build-essential m4
 ```
 
-Once those have installed, we are going to make a directory, clone the repo, checkout the appropriate version for `mithril-client-cli` specifically. 
+Once those have installed, we are going to make a directory, clone the repo, and checkout the appropriate version for `mithril-client-cli` specifically, as follows:
 
 ```
 mkdir ~/mithril/
@@ -48,7 +48,7 @@ git fetch --tags --all
 git checkout 2445.0
 ```
 
-Next it's time to build it.
+Next it's time to build:
 
 ```
 make build
@@ -65,22 +65,22 @@ While this builds, this is a good opportunity to stand up, walk around, stretch 
 Compiling can be quite system intensive. If you'd like, while the `mithril-client` is compiling, open an another SSH session with your Raspberry Pi server and run the `htop` command to see how hard that litte machine is working. ![workwork](/img/workingharthtop.png)
 :::
 
-Once the build has finished, copy the files to the directory within your path.
+Once the build has finished, copy the files to the directory within your path, as follows:
 
 ```
 cp ~/mithril/mithril/mithril-client-cli/mithril-client ~/preview/bin/
 ```
 
-Check your `mithril-client` version.
+Check your `mithril-client` version:
 
 ```
 mithril-client --version
 ```
-Your output should look something like this
+Your output should look something like this:
 
 ![clientv](/img/mclient.png)
 
-Now we are ready to pull a snapshot down and get our node synced with the chain. 
+Now, we are ready to pull a snapshot down and get our node synced with the chain. 
 
 First, let's set a couple of variables specific to our aggregator and network. Because we only really need to do this one time, we can just create these variables during this terminal/ssh session. 
 
@@ -89,7 +89,7 @@ First variable is the network.
 ```
 export CARDANO_NETWORK=preview
 ```
-Second is the aggregator endpoint.
+Second variable is the aggregator endpoint.
 
 ```
 export AGGREGATOR_ENDPOINT=https://aggregator.pre-release-preview.api.mithril.network/aggregator
@@ -133,7 +133,7 @@ Please ensure you are in the desired working directory as the snapshots are cons
 
 :::
 
-Change to the preview directory. 
+Change to the preview directory, as follows: 
 
 ```
 cd ~/preview
@@ -145,7 +145,7 @@ It's now time to download the snapshot. Please note your digest hash if you are 
 mithril-client cardano-db download c7694c1bf40ab45022c0c8e5e24f9b0dfeb9410a43e51858d58b2766678bdf75
 ```
 
-You should see something like this
+You should see something like this:
 
 ![snapdl](/img/downloadsnap1.png)
 
