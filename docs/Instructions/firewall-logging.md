@@ -5,7 +5,7 @@ sidebar_position: 5
 
 # Logging, Firewall, and Monitoring
 
-## A couple of Daemons
+## A couple of daemons
 
 Before moving forward, let's talk about and add a couple of services to our server. 
 
@@ -19,15 +19,15 @@ It is a good idea to run this on any publicly accessible server.
 sudo apt-get install -y fail2ban
 ```
 
-The other generic service I'd like to install is **chrony**
+The other generic service to install is **chrony**
 
-**chrony** is an implementation of the Network Time Protocol. **Cardano** is very dependent on time and requires that block producing nodes, relays, and any other node keep accurate time. This is especially critical for block producing nodes as the network expects blocks to be minted and propogated within a second (slot). With default settings **chrony** will regularly check in with publicly available ntp servers. In our case it will check with `pool.ntp.org`. While we have the ability to configure many options in `/etc/chrony.conf`, such as specifying a lower stratum NTP server, the default settings should be more than adequate for our purposes.
+**chrony** is an implementation of the Network Time Protocol. **Cardano** is dependent on time and requires that block producing nodes, relays, and any other node keep accurate time. This is especially critical for block producing nodes as the network expects blocks to be minted and propogated within a second (slot). With default settings, **chrony** will regularly check in with publicly available ntp servers. In our case it will check with `pool.ntp.org`. While we have the ability to configure many options in `/etc/chrony.conf`, such as specifying a lower stratum NTP server, the default settings should be more than adequate for our purposes.
 
 ```
 sudo apt-get install -y chrony
 ```
 
-Once installed, check to ensure **chrony** is keeping your server in sync.
+Once installed, check to ensure **chrony** is keeping your server in sync, as follows:
 
 ```
 chronyc tracking
@@ -37,7 +37,7 @@ chronyc tracking
 
 ## Firewall
 
-Running any internet-accessible infrastructure requires some security measures to be taken, and the firewall is one of the most important. Today, we will be using **ufw** (uncomplicated firewall) which comes packaged with our Ubuntu server Linux distribution. **ufw** is just a simple and user friendly frontend for **iptables**, which allows us to configure IP packet filtering rules of the Linux kernel firewall.
+Running any internet-accessible infrastructure requires some security measures to be implemented, and the firewall is one of the most important. Today, we will be using **ufw** (uncomplicated firewall) which comes packaged with our Ubuntu server Linux distribution. **ufw** is just a simple and user friendly frontend for **iptables**, which allows us to configure IP packet filtering rules of the Linux kernel firewall.
 
 First, let's set a couple of default rules. 
 
@@ -72,7 +72,7 @@ If you skip this step and enable the firewall, you will no longer be able to acc
 :::
 
 
-Let's make our `cardano-node` port available.
+Let's make our `cardano-node` port available, as follows:
 
 ```
 sudo ufw allow 1694/tcp
@@ -84,13 +84,13 @@ The `cardano-node` node-to-node (NtN) protocol was designed to facilitate two-wa
 
 :::
 
-Next we need to open the port for the Prometheus node exporter (more on that in a minute...)
+Next, we need to open the port for the Prometheus node exporter (more on that in a minute...)
 
 ```
 sudo ufw allow 9100/tcp
 ```
 
-Then let's open the port to our `cardano-node` Prometheus exporter.
+Then, let's open the port to our `cardano-node` Prometheus exporter.
 
 ```
 sudo ufw allow 12798/tcp
@@ -118,7 +118,7 @@ sudo ufw status
 
 ![ufwstat](/img/ufwstatus.png)
 
-## Logging and Monitoring
+## Logging and monitoring
 
 The next thing we need to do is to turn on some logging and monitoring for our node.
 
@@ -130,13 +130,13 @@ The next thing we need to do is to turn on some logging and monitoring for our n
 
 :::
 
-To allow a **Prometheus** server to scrape data from our node, we need to make an adjustment to our node configuration file. 
+To allow a **Prometheus** server to scrape data from our node, we need to make an adjustment to our node configuration file, as follows: 
 
 ```
 nano ~/preview/config/config.json
 ```
 
-Find the `"hasPrometheus"` line and change the IP from the localhost `127.0.0.1` to listening `0.0.0.0`
+Find the `"hasPrometheus"` line and change the IP from the localhost `127.0.0.1` to listening `0.0.0.0`as follows:
 
 ```
   "hasPrometheus": [
@@ -149,7 +149,7 @@ We're not quite ready to save and exit the file yet, while we're in here editing
 
 The first we're going to change is the defaultl logging location. This will specify where logs are written if no setup scribe is configured. 
 
-Find `"defaultScribes"` and we are going to change it from Stdout to FileSK, with a path to the logs directory we created earlier. 
+Find `"defaultScribes"` and we are going to change it from Stdout to FileSK, with a path to the logs directory we created earlier, as follows: 
 
 ```
   "defaultScribes": [
@@ -160,7 +160,7 @@ Find `"defaultScribes"` and we are going to change it from Stdout to FileSK, wit
   ],
 ```
 
-Now we are going to specify the `"setupScribes"` output. Find the `"setupScribes"` line and modify it to match the following.
+Now we are going to specify the `"setupScribes"` output. Find the `"setupScribes"` line and modify it to match the following:
 
 ```
     "setupScribes": [
@@ -181,7 +181,7 @@ Be careful to preserve the `.json` formatting when adjusting these. It is easy t
 
 Once your `config.json` file has been updated, go ahead and save `ctrl + o` and exit `ctrl + x`
 
-To make these changes active, we need to restart the node.
+To make these changes active, we need to restart the node, as follows:
 
 ```
 sudo sytemctl restart node.service
@@ -193,7 +193,7 @@ Give it a few seconds and then check to make sure the service is running.
 sudo systemctl status node.service
 ```
 
-You can also query the tip again. 
+You can also query the tip again, as follows: 
 
 ```
 cardano-cli query tip --testnet-magic 2
@@ -205,7 +205,7 @@ If you are getting a "socket not found" error when doing this, but your `node.se
 
 :::
 
-Let's take a live look at our logs with the tail command
+Let's take a live look at our logs with the tail command, as follows:
 
 ```
 tail -f n !!  ~/preview/logs/cardano.json
@@ -215,7 +215,7 @@ You should see the live log output of your `cardano-node` to the `cardano.json` 
 
 `ctrl + c` to end the command
 
-Next, let's install the **Prometheus** node exporter. 
+Next, let's install the **Prometheus** node exporter, as follows: 
 
 ```
 sudo apt-get install -y prometheus-node-exporter
